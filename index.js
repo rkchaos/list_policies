@@ -45,6 +45,7 @@ app.post('/allPolicies', async (req, res) => {
         console.log(policies);
 
         const policyDetails = policies.map(policy => ({
+               policyid: policy._id,
             policyName: policy.policyName,
             policyType: policy.policyType,
             policyDescription: policy.policyDescription

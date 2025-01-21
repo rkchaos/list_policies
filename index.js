@@ -30,6 +30,8 @@ const Policy = mongoose.model('Policy', PolicySchema);
 
 app.post('/allPolicies', async (req, res) => {
     try {
+        let{policyid}=req.body;
+        console.log(policyid)
         const excludedId = '6777932ef2013d3cfcc27347';
 
    
@@ -42,7 +44,7 @@ app.post('/allPolicies', async (req, res) => {
             { form: 0, dataFormat: 0, createdAt: 0, updatedAt: 0, __v: 0 } // Exclude fields from the result
         );
 
-        console.log(policies);
+        // console.log(policies);
 
         const policyDetails = policies.map(policy => ({
                policyid: policy._id,
@@ -50,8 +52,13 @@ app.post('/allPolicies', async (req, res) => {
             policyType: policy.policyType,
             policyDescription: policy.policyDescription
         }));
-
-        res.status(200).json({ msg: "ok", policies: policyDetails });
+        if(policyid){
+            const policieesbyid=await Policy.find({policyName:policyid});
+            res.status(200).json({ msg: "ok", policies: policyDetails,policieesbyid:policieesbyid });
+        }else{
+            res.status(200).json({ msg: "ok", policies: policyDetails });
+        }
+      
     } catch (err) {
         console.error(err);
         res.status(500).json({ msg: "Internal server error" });
